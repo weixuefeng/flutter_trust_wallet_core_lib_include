@@ -2,17 +2,20 @@
  * @Author: pony@diynova.com
  * @Date: 2022-05-11 09:57:24
  * @LastEditors: pony@diynova.com
- * @LastEditTime: 2022-05-11 17:02:34
+ * @LastEditTime: 2022-05-13 12:07:23
  * @FilePath: /flutter_trust_wallet_core_lib_include/example/lib/newchain_example.dart
  * @Description: 
  */
 import 'package:convert/convert.dart';
+import 'package:ethereum/ethereum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_trust_wallet_core/flutter_trust_wallet_core.dart';
 import 'package:flutter_trust_wallet_core/trust_wallet_core_ffi.dart';
 import 'package:flutter_trust_wallet_core_example/base_example.dart';
 import 'package:flutter_trust_wallet_core/protobuf/Ethereum.pb.dart'
     as Ethereum;
+import 'package:flutter_trust_wallet_core_example/network/rpc_ethereum.dart';
+import 'package:http/http.dart' as http;
 
 class NewChainExample extends BaseExample {
   final HDWallet wallet;
@@ -69,5 +72,41 @@ class _NewChainExampleState extends BaseExampleState<NewChainExample> {
         AnySigner.sign(input.writeToBuffer(), TWCoinType.TWCoinTypeNewChain)
             .toList());
     logger.d("output = ${hex.encode(output.encoded.toList())}");
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+        ),
+        body: Center(
+            child: Column(children: [
+          ElevatedButton(
+            child: Text("CHECK1"),
+            onPressed: () => {check1()},
+          ),
+        ])));
+  }
+
+  void check1() async {
+    RpcEthereum rpc = RpcEthereum();
+    print("check1");
+    String address = widget.wallet.getAddressForCoin(1642);
+    var balance = await rpc.getBalance(address);
+    var count = await rpc.getTransactionCount(address);
+    var gasPrice = await rpc.gasPrice();
+    var gas = await rpc.estimateGas(address, address, gasPrice, gasPrice, 1,
+        EthereumData.fromString("0x1"));
+    print(
+        "balance = $balance, count = $count, gasPrice = $gasPrice, gas = $gas");
+  }
+
+  void check2() {
+    var url = Uri.parse('https://example.com/whatsit/create');
+    var response = http.post(url, body: {
+      'name': 'doodle',
+      'color': 'blue'
+    }).then((res) => {print(res.body)});
   }
 }
