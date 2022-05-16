@@ -2,12 +2,11 @@
  * @Author: pony@diynova.com
  * @Date: 2022-05-11 09:57:24
  * @LastEditors: pony@diynova.com
- * @LastEditTime: 2022-05-13 12:07:23
+ * @LastEditTime: 2022-05-16 11:52:39
  * @FilePath: /flutter_trust_wallet_core_lib_include/example/lib/newchain_example.dart
  * @Description: 
  */
 import 'package:convert/convert.dart';
-import 'package:ethereum/ethereum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_trust_wallet_core/flutter_trust_wallet_core.dart';
 import 'package:flutter_trust_wallet_core/trust_wallet_core_ffi.dart';
@@ -16,6 +15,10 @@ import 'package:flutter_trust_wallet_core/protobuf/Ethereum.pb.dart'
     as Ethereum;
 import 'package:flutter_trust_wallet_core_example/network/rpc_ethereum.dart';
 import 'package:http/http.dart' as http;
+
+const NewChainTest = "https://rpc3.newchain.cloud.diynova.com";
+const EthMian = "https://mainnet.infura.io/v3/3e92ec988e004b09ad2ad8a677d5e0ef";
+const EthTest = "https://ropsten.infura.io/v3/3e92ec988e004b09ad2ad8a677d5e0ef";
 
 class NewChainExample extends BaseExample {
   final HDWallet wallet;
@@ -90,20 +93,20 @@ class _NewChainExampleState extends BaseExampleState<NewChainExample> {
   }
 
   void check1() async {
-    RpcEthereum rpc = RpcEthereum();
+    RpcEthereum rpc = RpcEthereum(NewChainTest);
     print("check1");
     String address = widget.wallet.getAddressForCoin(1642);
     var balance = await rpc.getBalance(address);
+    print("balance: $balance");
     var count = await rpc.getTransactionCount(address);
     var gasPrice = await rpc.gasPrice();
-    var gas = await rpc.estimateGas(address, address, gasPrice, gasPrice, 1,
-        EthereumData.fromString("0x1"));
-    print(
-        "balance = $balance, count = $count, gasPrice = $gasPrice, gas = $gas");
+    // var gas = await rpc.estimateGas(address, address, gasPrice, gasPrice, 1,
+    //     EthereumData.fromString("0x1"));
+    print("balance = $balance, count = $count, gasPrice = $gasPrice");
   }
 
   void check2() {
-    var url = Uri.parse('https://example.com/whatsit/create');
+    var url = Uri.parse('https://www.newtonproject.org/');
     var response = http.post(url, body: {
       'name': 'doodle',
       'color': 'blue'

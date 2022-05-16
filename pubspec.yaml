@@ -14,11 +14,7 @@ dependencies:
   ffi: ^1.1.2
   protobuf: ^2.0.1
   fixnum: ^1.0.0
-dev_dependencies:
-  integration_test:
-    sdk: flutter
-  flutter_test:
-    sdk: flutter
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
